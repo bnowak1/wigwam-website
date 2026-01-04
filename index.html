@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wigwam — Decision Intelligence Platform</title>
+    <meta name="description" content="Wigwam helps teams make better high-stakes decisions by enforcing independent thinking, using AI to surface blind spots, and preserving decision rationale.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --color-bg-deep: #08090d;
+            --color-bg-primary: #0c0e14;
+            --color-bg-elevated: #12151e;
+            --color-bg-card: #181c28;
+            --color-accent: #c9a962;
+            --color-accent-dim: #a08845;
+            --color-accent-glow: rgba(201, 169, 98, 0.15);
+            --color-text-primary: #e8e6e1;
+            --color-text-secondary: #9a9590;
+            --color-text-muted: #5a5550;
+            --color-border: rgba(255, 255, 255, 0.08);
+            --color-border-accent: rgba(201, 169, 98, 0.3);
+
+            --font-display: 'DM Serif Display', Georgia, serif;
+            --font-body: 'Source Sans 3', system-ui, sans-serif;
+
+            --space-xs: 0.5rem;
+            --space-sm: 1rem;
+            --space-md: 1.5rem;
+            --space-lg: 2.5rem;
+            --space-xl: 4rem;
+            --space-2xl: 6rem;
+            --space-3xl: 10rem;
+
+            --max-width: 1200px;
+            --max-width-narrow: 800px;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-bg-deep);
+            color: var(--color-text-primary);
+            line-height: 1.7;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        /* Grain Texture Overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-family: var(--font-display);
+            font-weight: 400;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+        }
+
+        h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); }
+        h2 { font-size: clamp(2rem, 4vw, 3rem); }
+        h3 { font-size: clamp(1.5rem, 2.5vw, 2rem); }
+        h4 { font-size: 1.25rem; }
+
+        p {
+            max-width: 65ch;
+        }
+
+        .lead {
+            font-size: 1.25rem;
+            color: var(--color-text-secondary);
+            line-height: 1.8;
+        }
+
+        /* Links */
+        a {
+            color: var(--color-accent);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--color-text-primary);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            border-radius: 2px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--color-accent);
+            color: var(--color-bg-deep);
+        }
+
+        .btn-primary:hover {
+            background: var(--color-text-primary);
+            color: var(--color-bg-deep);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px var(--color-accent-glow);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--color-text-primary);
+            border: 1px solid var(--color-border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--color-accent);
+            color: var(--color-accent);
+        }
+
+        .btn-arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover .btn-arrow {
+            transform: translateX(4px);
+        }
+
+        /* Layout */
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 var(--space-lg);
+        }
+
+        .container-narrow {
+            max-width: var(--max-width-narrow);
+        }
+
+        section {
+            padding: var(--space-3xl) 0;
+            position: relative;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: var(--space-md) 0;
+            transition: all 0.4s ease;
+        }
+
+        .nav.scrolled {
+            background: rgba(8, 9, 13, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--color-text-primary);
+            letter-spacing: 0.1em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: var(--space-lg);
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-text-primary);
+        }
+
+        .nav-cta {
+            padding: 0.75rem 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding-top: var(--space-3xl);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60%;
+            height: 100%;
+            background: radial-gradient(ellipse at 70% 30%, rgba(201, 169, 98, 0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-tagline {
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-accent);
+            margin-bottom: var(--space-lg);
+            opacity: 0;
+            animation: fadeUp 1s ease forwards;
+            animation-delay: 0.2s;
+        }
+
+        .hero h1 {
+            margin-bottom: var(--space-md);
+            opacity: 0;
+            animation: fadeUp 1s ease forwards;
+            animation-delay: 0.4s;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            color: var(--color-accent);
+        }
+
+        .hero-description {
+            max-width: 600px;
+            margin-bottom: var(--space-xl);
+            opacity: 0;
+            animation: fadeUp 1s ease forwards;
+            animation-delay: 0.6s;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: var(--space-md);
+            opacity: 0;
+            animation: fadeUp 1s ease forwards;
+            animation-delay: 0.8s;
+        }
+
+        .hero-visual {
+            position: absolute;
+            right: -10%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50%;
+            aspect-ratio: 1;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .hero-visual svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Section Headers */
+        .section-header {
+            margin-bottom: var(--space-2xl);
+        }
+
+        .section-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-accent);
+            margin-bottom: var(--space-sm);
+        }
+
+        .section-title {
+            margin-bottom: var(--space-md);
+        }
+
+        .section-description {
+            color: var(--color-text-secondary);
+            font-size: 1.125rem;
+        }
+
+        /* Why Decisions Fail */
+        .failures {
+            background: linear-gradient(180deg, var(--color-bg-deep) 0%, var(--color-bg-primary) 100%);
+        }
+
+        .failures-intro {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto var(--space-2xl);
+        }
+
+        .failures-intro h2 {
+            margin-bottom: var(--space-md);
+        }
+
+        .failures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-md);
+        }
+
+        .failure-card {
+            background: var(--color-bg-elevated);
+            border: 1px solid var(--color-border);
+            padding: var(--space-lg);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .failure-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--color-accent);
+            transform: scaleY(0);
+            transform-origin: top;
+            transition: transform 0.4s ease;
+        }
+
+        .failure-card:hover {
+            border-color: var(--color-border-accent);
+            transform: translateY(-4px);
+        }
+
+        .failure-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .failure-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: var(--space-md);
+            color: var(--color-accent);
+            opacity: 0.8;
+        }
+
+        .failure-card h4 {
+            margin-bottom: var(--space-xs);
+            color: var(--color-text-primary);
+        }
+
+        .failure-card p {
+            color: var(--color-text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* How It Works */
+        .process {
+            background: var(--color-bg-primary);
+        }
+
+        .process-phases {
+            display: grid;
+            gap: var(--space-xl);
+            position: relative;
+        }
+
+        .process-phases::before {
+            content: '';
+            position: absolute;
+            left: 23px;
+            top: 60px;
+            bottom: 60px;
+            width: 1px;
+            background: linear-gradient(180deg, var(--color-accent) 0%, var(--color-border) 100%);
+        }
+
+        .phase {
+            display: grid;
+            grid-template-columns: 48px 1fr;
+            gap: var(--space-lg);
+            align-items: start;
+        }
+
+        .phase-number {
+            width: 48px;
+            height: 48px;
+            background: var(--color-bg-elevated);
+            border: 1px solid var(--color-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            color: var(--color-accent);
+            position: relative;
+            z-index: 2;
+        }
+
+        .phase-content h3 {
+            margin-bottom: var(--space-xs);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .phase-tag {
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-accent);
+            background: var(--color-accent-glow);
+            padding: 0.25rem 0.75rem;
+            border-radius: 2px;
+        }
+
+        .phase-content p {
+            color: var(--color-text-secondary);
+        }
+
+        .process-quote {
+            margin-top: var(--space-2xl);
+            padding: var(--space-lg);
+            border-left: 3px solid var(--color-accent);
+            background: var(--color-bg-elevated);
+        }
+
+        .process-quote p {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-style: italic;
+            color: var(--color-text-primary);
+        }
+
+        /* Features */
+        .features {
+            background: var(--color-bg-deep);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-md);
+        }
+
+        .feature-card {
+            background: var(--color-bg-elevated);
+            border: 1px solid var(--color-border);
+            padding: var(--space-xl);
+            text-align: center;
+            transition: all 0.4s ease;
+        }
+
+        .feature-card:hover {
+            border-color: var(--color-border-accent);
+            background: var(--color-bg-card);
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto var(--space-md);
+            color: var(--color-accent);
+        }
+
+        .feature-card h3 {
+            margin-bottom: var(--space-sm);
+        }
+
+        .feature-card p {
+            color: var(--color-text-secondary);
+            margin: 0 auto;
+        }
+
+        /* Comparison */
+        .comparison {
+            background: linear-gradient(180deg, var(--color-bg-deep) 0%, var(--color-bg-primary) 50%, var(--color-bg-deep) 100%);
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: var(--space-xl);
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: var(--space-md) var(--space-lg);
+            text-align: left;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .comparison-table th {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: var(--color-text-secondary);
+        }
+
+        .comparison-table th:last-child {
+            color: var(--color-accent);
+        }
+
+        .comparison-table td {
+            font-size: 1.1rem;
+        }
+
+        .comparison-table td:first-child {
+            color: var(--color-text-muted);
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+
+        .comparison-table td:last-child {
+            color: var(--color-text-primary);
+            font-weight: 500;
+        }
+
+        .comparison-table tbody tr {
+            transition: background 0.3s ease;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--color-bg-elevated);
+        }
+
+        /* Use Cases */
+        .use-cases {
+            background: var(--color-bg-primary);
+        }
+
+        .use-cases-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-md);
+        }
+
+        .use-case {
+            background: var(--color-bg-elevated);
+            border: 1px solid var(--color-border);
+            padding: var(--space-xl);
+            transition: all 0.4s ease;
+        }
+
+        .use-case:hover {
+            border-color: var(--color-border-accent);
+        }
+
+        .use-case-icon {
+            width: 40px;
+            height: 40px;
+            margin-bottom: var(--space-md);
+            color: var(--color-accent);
+        }
+
+        .use-case h3 {
+            margin-bottom: var(--space-md);
+        }
+
+        .use-case ul {
+            list-style: none;
+        }
+
+        .use-case li {
+            color: var(--color-text-secondary);
+            padding: var(--space-xs) 0;
+            padding-left: var(--space-md);
+            position: relative;
+        }
+
+        .use-case li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 6px;
+            height: 1px;
+            background: var(--color-accent);
+        }
+
+        /* Security */
+        .security {
+            background: var(--color-bg-deep);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .security::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(201, 169, 98, 0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(201, 169, 98, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .security-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .security-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-lg);
+            margin-top: var(--space-xl);
+        }
+
+        .security-item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-md);
+        }
+
+        .security-icon {
+            width: 24px;
+            height: 24px;
+            color: var(--color-accent);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .security-item h4 {
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .security-item p {
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+        }
+
+        /* Pricing */
+        .pricing {
+            background: var(--color-bg-primary);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-md);
+            margin-top: var(--space-xl);
+        }
+
+        .pricing-card {
+            background: var(--color-bg-elevated);
+            border: 1px solid var(--color-border);
+            padding: var(--space-xl);
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--color-accent);
+        }
+
+        .pricing-card.featured::before {
+            content: 'Most Popular';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--color-accent);
+            color: var(--color-bg-deep);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 0.5rem 1rem;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--color-border-accent);
+        }
+
+        .pricing-tier {
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-accent);
+            margin-bottom: var(--space-sm);
+        }
+
+        .pricing-card h3 {
+            margin-bottom: var(--space-md);
+        }
+
+        .pricing-description {
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-lg);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: var(--space-lg);
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-xs) 0;
+            color: var(--color-text-secondary);
+        }
+
+        .pricing-features li svg {
+            width: 16px;
+            height: 16px;
+            color: var(--color-accent);
+            flex-shrink: 0;
+        }
+
+        .pricing-card .btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* About */
+        .about {
+            background: var(--color-bg-deep);
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-2xl);
+            align-items: center;
+        }
+
+        .about-text h2 {
+            margin-bottom: var(--space-md);
+        }
+
+        .about-text p {
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-md);
+        }
+
+        .about-text p:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .about-visual {
+            position: relative;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .about-visual::before {
+            content: '';
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            border: 1px solid var(--color-border);
+            transform: rotate(45deg);
+        }
+
+        .about-visual::after {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 60%;
+            border: 1px solid var(--color-accent);
+            opacity: 0.3;
+            transform: rotate(45deg);
+        }
+
+        .about-symbol {
+            font-family: var(--font-display);
+            font-size: 6rem;
+            color: var(--color-accent);
+            opacity: 0.8;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(180deg, var(--color-bg-primary) 0%, var(--color-bg-deep) 100%);
+            text-align: center;
+            padding: var(--space-3xl) 0;
+        }
+
+        .cta-section h2 {
+            margin-bottom: var(--space-md);
+        }
+
+        .cta-section p {
+            color: var(--color-text-secondary);
+            margin: 0 auto var(--space-xl);
+            max-width: 500px;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--color-bg-deep);
+            border-top: 1px solid var(--color-border);
+            padding: var(--space-2xl) 0 var(--space-xl);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: var(--space-2xl);
+        }
+
+        .footer-brand p {
+            color: var(--color-text-secondary);
+            font-size: 0.95rem;
+            margin-top: var(--space-md);
+            max-width: 300px;
+        }
+
+        .footer-column h4 {
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-md);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: var(--space-xs);
+        }
+
+        .footer-column a {
+            color: var(--color-text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .footer-bottom {
+            margin-top: var(--space-2xl);
+            padding-top: var(--space-lg);
+            border-top: 1px solid var(--color-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+        }
+
+        .footer-legal {
+            display: flex;
+            gap: var(--space-lg);
+        }
+
+        .footer-legal a {
+            color: var(--color-text-muted);
+        }
+
+        /* Scroll Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .features-grid,
+            .pricing-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-ctas {
+                flex-direction: column;
+            }
+
+            .features-grid,
+            .use-cases-grid,
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+
+            .about-visual {
+                order: -1;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: var(--space-sm);
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: var(--space-xl);
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: var(--space-md);
+                text-align: center;
+            }
+
+            .process-phases::before {
+                display: none;
+            }
+
+            .phase {
+                grid-template-columns: 40px 1fr;
+                gap: var(--space-md);
+            }
+
+            .phase-number {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="container">
+            <div class="nav-inner">
+                <a href="#" class="nav-logo">WIGWAM</a>
+                <ul class="nav-links">
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#features">Product</a></li>
+                    <li><a href="#use-cases">Use Cases</a></li>
+                    <li><a href="#security">Security</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+                <a href="#start" class="btn btn-primary nav-cta">Start a decision</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <span class="hero-tagline">Decision Intelligence Platform</span>
+                <h1>Think alone.<br>Decide together.<br><em>Remember forever.</em></h1>
+                <p class="lead hero-description">
+                    Wigwam helps teams make better high-stakes decisions by enforcing independent thinking, applying AI-driven analysis, and preserving decision rationale over time.
+                </p>
+                <div class="hero-ctas">
+                    <a href="#start" class="btn btn-primary">
+                        Start a decision
+                        <span class="btn-arrow">&rarr;</span>
+                    </a>
+                    <a href="#how-it-works" class="btn btn-secondary">See how it works</a>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="200" cy="200" r="150" stroke="currentColor" stroke-opacity="0.1"/>
+                <circle cx="200" cy="200" r="100" stroke="currentColor" stroke-opacity="0.2"/>
+                <circle cx="200" cy="200" r="50" stroke="currentColor" stroke-opacity="0.3"/>
+                <circle cx="200" cy="200" r="8" fill="#c9a962" fill-opacity="0.5"/>
+                <line x1="200" y1="50" x2="200" y2="350" stroke="currentColor" stroke-opacity="0.05"/>
+                <line x1="50" y1="200" x2="350" y2="200" stroke="currentColor" stroke-opacity="0.05"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Why Decisions Fail -->
+    <section class="failures" id="why-decisions-fail">
+        <div class="container">
+            <div class="failures-intro reveal">
+                <h2>Why Decisions Fail</h2>
+                <p class="lead">Most decisions don't fail because people are wrong. They fail because the process is broken.</p>
+            </div>
+            <div class="failures-grid">
+                <div class="failure-card reveal reveal-delay-1">
+                    <svg class="failure-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="24" cy="24" r="20"/>
+                        <path d="M24 14v12M24 30v4"/>
+                    </svg>
+                    <h4>Anchoring Bias</h4>
+                    <p>The first idea anchors the room. Every subsequent thought orbits around it, limiting exploration.</p>
+                </div>
+                <div class="failure-card reveal reveal-delay-2">
+                    <svg class="failure-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M12 36V24a12 12 0 1124 0v12"/>
+                        <circle cx="24" cy="38" r="4"/>
+                    </svg>
+                    <h4>Status Bias</h4>
+                    <p>Senior voices override insight. Hierarchy replaces merit in determining which ideas survive.</p>
+                </div>
+                <div class="failure-card reveal reveal-delay-3">
+                    <svg class="failure-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M10 24h28M24 10v28"/>
+                        <path d="M16 16l16 16M32 16L16 32" stroke-opacity="0.3"/>
+                    </svg>
+                    <h4>Conformity Pressure</h4>
+                    <p>Dissent disappears quietly. Teams converge on comfortable agreement rather than optimal outcomes.</p>
+                </div>
+                <div class="failure-card reveal reveal-delay-4">
+                    <svg class="failure-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="8" y="8" width="32" height="32" rx="4"/>
+                        <path d="M16 24h16M24 16v16" stroke-opacity="0.3"/>
+                        <path d="M14 34l20-20"/>
+                    </svg>
+                    <h4>Unexamined Risks</h4>
+                    <p>Urgency crowds out diligence. Risks go unexamined until they become consequences.</p>
+                </div>
+                <div class="failure-card reveal reveal-delay-1">
+                    <svg class="failure-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="24" cy="24" r="16"/>
+                        <path d="M24 16v8l6 4"/>
+                        <path d="M8 24h4M36 24h4M24 8v4M24 36v4" stroke-opacity="0.3"/>
+                    </svg>
+                    <h4>Organizational Amnesia</h4>
+                    <p>Context is lost weeks later. Teams repeat mistakes because rationale was never preserved.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="process" id="how-it-works">
+        <div class="container container-narrow">
+            <div class="section-header reveal">
+                <span class="section-label">Process</span>
+                <h2 class="section-title">How It Works</h2>
+                <p class="section-description">A structured system for unstructured thinking. Wigwam runs decisions through a phase-locked workflow designed to eliminate bias and preserve insight.</p>
+            </div>
+
+            <div class="process-phases">
+                <div class="phase reveal">
+                    <div class="phase-number">1</div>
+                    <div class="phase-content">
+                        <h3>Solo Build <span class="phase-tag">Isolation</span></h3>
+                        <p>Participants think in isolation. No influence. No hierarchy. Just focused, independent reasoning before any exposure to group dynamics.</p>
+                    </div>
+                </div>
+                <div class="phase reveal">
+                    <div class="phase-number">2</div>
+                    <div class="phase-content">
+                        <h3>Reveal</h3>
+                        <p>All ideas appear simultaneously. No first-mover advantage. No anchoring. Every perspective enters the discussion with equal weight.</p>
+                    </div>
+                </div>
+                <div class="phase reveal">
+                    <div class="phase-number">3</div>
+                    <div class="phase-content">
+                        <h3>Analysis <span class="phase-tag">AI-Powered</span></h3>
+                        <p>AI clusters related ideas, identifies contradictions, and surfaces blind spots. Patterns emerge that humans alone would miss.</p>
+                    </div>
+                </div>
+                <div class="phase reveal">
+                    <div class="phase-number">4</div>
+                    <div class="phase-content">
+                        <h3>Synthesis</h3>
+                        <p>Multiple decision paths are generated with clear tradeoffs. Not consensus by exhaustion, but explicit choices with documented reasoning.</p>
+                    </div>
+                </div>
+                <div class="phase reveal">
+                    <div class="phase-number">5</div>
+                    <div class="phase-content">
+                        <h3>Decision Lock</h3>
+                        <p>The final decision is captured with its tradeoffs, dissenting views, and ownership. An immutable record for future accountability.</p>
+                    </div>
+                </div>
+                <div class="phase reveal">
+                    <div class="phase-number">6</div>
+                    <div class="phase-content">
+                        <h3>Reflection</h3>
+                        <p>Learning without ego. Teams review outcomes against original reasoning, building institutional wisdom over time.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="process-quote reveal">
+                <p>The value isn't the meeting. It's the enforced thinking.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header reveal" style="text-align: center; max-width: 600px; margin: 0 auto var(--space-2xl);">
+                <span class="section-label">Product</span>
+                <h2 class="section-title">Decision Intelligence, Built from First Principles</h2>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card reveal reveal-delay-1">
+                    <svg class="feature-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="32" cy="32" r="24"/>
+                        <circle cx="32" cy="32" r="8"/>
+                        <path d="M32 8v8M32 48v8M8 32h8M48 32h8"/>
+                    </svg>
+                    <h3>Independent Thought</h3>
+                    <p>Solo Build Isolation Mode ensures every participant thinks before they're influenced.</p>
+                </div>
+                <div class="feature-card reveal reveal-delay-2">
+                    <svg class="feature-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="12" y="12" width="40" height="40" rx="4"/>
+                        <path d="M20 32h24M32 20v24"/>
+                        <circle cx="32" cy="32" r="4" fill="currentColor"/>
+                    </svg>
+                    <h3>AI Analysis Engine</h3>
+                    <p>Surface blind spots, cluster ideas, and identify contradictions that humans miss.</p>
+                </div>
+                <div class="feature-card reveal reveal-delay-3">
+                    <svg class="feature-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M16 48V24a16 16 0 1132 0v24"/>
+                        <rect x="12" y="44" width="40" height="8" rx="2"/>
+                        <circle cx="32" cy="24" r="8"/>
+                    </svg>
+                    <h3>Decision Memory</h3>
+                    <p>Immutable Decision Ledger preserves every choice, rationale, and outcome for future learning.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison -->
+    <section class="comparison" id="comparison">
+        <div class="container container-narrow">
+            <div class="section-header reveal" style="text-align: center;">
+                <span class="section-label">Differentiation</span>
+                <h2 class="section-title">A Different Approach</h2>
+            </div>
+
+            <table class="comparison-table reveal">
+                <thead>
+                    <tr>
+                        <th>Traditional Tools</th>
+                        <th>Wigwam</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Discussion-first</td>
+                        <td>Thinking-first</td>
+                    </tr>
+                    <tr>
+                        <td>Real-time bias</td>
+                        <td>Isolation by design</td>
+                    </tr>
+                    <tr>
+                        <td>Consensus theater</td>
+                        <td>Explicit tradeoffs</td>
+                    </tr>
+                    <tr>
+                        <td>Decisions forgotten</td>
+                        <td>Decisions remembered</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section class="use-cases" id="use-cases">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">Applications</span>
+                <h2 class="section-title">Use Cases</h2>
+                <p class="section-description">For teams that make decisions they can't afford to get wrong.</p>
+            </div>
+
+            <div class="use-cases-grid">
+                <div class="use-case reveal reveal-delay-1">
+                    <svg class="use-case-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="4" y="8" width="32" height="24" rx="2"/>
+                        <path d="M4 14h32M12 20h8M12 26h16"/>
+                    </svg>
+                    <h3>Engineering & Architecture</h3>
+                    <ul>
+                        <li>System design decisions</li>
+                        <li>Build vs. buy evaluations</li>
+                        <li>Incident retrospectives</li>
+                    </ul>
+                </div>
+                <div class="use-case reveal reveal-delay-2">
+                    <svg class="use-case-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="20" cy="20" r="16"/>
+                        <path d="M20 12v8l6 4"/>
+                    </svg>
+                    <h3>Product & Platform</h3>
+                    <ul>
+                        <li>Roadmap prioritization</li>
+                        <li>Launch decisions</li>
+                        <li>Strategic pivots</li>
+                    </ul>
+                </div>
+                <div class="use-case reveal reveal-delay-3">
+                    <svg class="use-case-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M20 4l16 8v16l-16 8-16-8V12l16-8z"/>
+                        <path d="M20 20v16M4 12l16 8 16-8"/>
+                    </svg>
+                    <h3>Safety, Trust & Governance</h3>
+                    <ul>
+                        <li>Risk assessments</li>
+                        <li>Policy changes</li>
+                        <li>Compliance decisions</li>
+                    </ul>
+                </div>
+                <div class="use-case reveal reveal-delay-4">
+                    <svg class="use-case-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="8" y="4" width="24" height="32" rx="2"/>
+                        <path d="M14 12h12M14 18h12M14 24h8"/>
+                    </svg>
+                    <h3>Executives & Boards</h3>
+                    <ul>
+                        <li>Strategy evaluation</li>
+                        <li>Budget allocation</li>
+                        <li>M&A review</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security -->
+    <section class="security" id="security">
+        <div class="container">
+            <div class="security-content">
+                <div class="section-header reveal" style="text-align: center; max-width: 600px; margin: 0 auto;">
+                    <span class="section-label">Trust</span>
+                    <h2 class="section-title">Security & Trust</h2>
+                    <p class="section-description">Built for decisions that require accountability.</p>
+                </div>
+
+                <div class="security-grid reveal">
+                    <div class="security-item">
+                        <svg class="security-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 2l8 4v6c0 5.5-3.5 10-8 11-4.5-1-8-5.5-8-11V6l8-4z"/>
+                            <path d="M9 12l2 2 4-4"/>
+                        </svg>
+                        <div>
+                            <h4>Immutable Records</h4>
+                            <p>Decision history cannot be altered</p>
+                        </div>
+                    </div>
+                    <div class="security-item">
+                        <svg class="security-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="3" y="8" width="18" height="12" rx="2"/>
+                            <path d="M7 8V6a5 5 0 0110 0v2"/>
+                        </svg>
+                        <div>
+                            <h4>Full Audit Trails</h4>
+                            <p>Complete visibility into decision history</p>
+                        </div>
+                    </div>
+                    <div class="security-item">
+                        <svg class="security-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 6v6l4 2"/>
+                        </svg>
+                        <div>
+                            <h4>SOC-2 Aligned</h4>
+                            <p>Enterprise-grade security controls</p>
+                        </div>
+                    </div>
+                    <div class="security-item">
+                        <svg class="security-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M2 12h20"/>
+                            <path d="M12 2a15 15 0 010 20 15 15 0 010-20z"/>
+                        </svg>
+                        <div>
+                            <h4>GDPR Compliant</h4>
+                            <p>Data privacy by design</p>
+                        </div>
+                    </div>
+                    <div class="security-item">
+                        <svg class="security-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="8" r="4"/>
+                            <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
+                            <path d="M15 14l2 2 4-4"/>
+                        </svg>
+                        <div>
+                            <h4>Role-Based Access</h4>
+                            <p>Granular permission controls</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <div class="section-header reveal" style="text-align: center; max-width: 600px; margin: 0 auto;">
+                <span class="section-label">Pricing</span>
+                <h2 class="section-title">Simple Pricing Aligned with Value</h2>
+            </div>
+
+            <div class="pricing-grid">
+                <div class="pricing-card reveal reveal-delay-1">
+                    <span class="pricing-tier">Team</span>
+                    <h3>Per Seat</h3>
+                    <p class="pricing-description">For teams building a culture of better decision-making.</p>
+                    <ul class="pricing-features">
+                        <li>
+                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                            Unlimited decisions
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                            AI analysis engine
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                            Decision memory
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                            Team collaboration
+                        </li>
+                    </ul>
+                    <a href="#start" class="btn btn-secondary">Contact sales</a>
+                </div>
+                <div class="pricing-card featured reveal reveal-delay-2">
+                    <span class="pricing-tier">Enterprise</span>
+                    <h3>Custom</h3>
+                    <p class="pricing-description">For organizations where decision quality is strategic.</p>
+                    <ul class="pricing-features">
+                        <li>
+                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                            Everything in Team
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                            SSO & SAML
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                            Advanced audit logs
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                            Dedicated support
+                        </li>
+                    </ul>
+                    <a href="#start" class="btn btn-primary">Contact sales</a>
+                </div>
+                <div class="pricing-card reveal reveal-delay-3">
+                    <span class="pricing-tier">Advisory</span>
+                    <h3>Per Decision</h3>
+                    <p class="pricing-description">For boards, advisors, and high-stakes singular decisions.</p>
+                    <ul class="pricing-features">
+                        <li>
+                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                            Flexible participation
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                            No seat commitment
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                            Full feature access
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                            Permanent record
+                        </li>
+                    </ul>
+                    <a href="#start" class="btn btn-secondary">Contact sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text reveal">
+                    <span class="section-label">About</span>
+                    <h2>Wigwam exists because decision quality compounds.</h2>
+                    <p>Most organizations optimize execution and neglect decision-making. They build elaborate systems for project management, communication, and documentation—but treat decisions as ephemeral events that happen in meetings and disappear.</p>
+                    <p>We believe decisions are first-class assets. They should be structured, preserved, and learned from. The organizations that make better decisions today build compounding advantages tomorrow.</p>
+                </div>
+                <div class="about-visual reveal">
+                    <span class="about-symbol">W</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="start">
+        <div class="container">
+            <div class="reveal">
+                <h2>If the decision matters, the process should too.</h2>
+                <p>Start making decisions that your future self will thank you for.</p>
+                <a href="#" class="btn btn-primary">
+                    Start a decision
+                    <span class="btn-arrow">&rarr;</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="#" class="nav-logo">WIGWAM</a>
+                    <p>Decision Intelligence Platform for teams that make decisions they can't afford to get wrong.</p>
+                </div>
+                <div class="footer-column">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#security">Security</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">API</a></li>
+                        <li><a href="#">Status</a></li>
+                        <li><a href="#">Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2025 Wigwam. All rights reserved.</span>
+                <div class="footer-legal">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Navigation scroll effect
+        const nav = document.getElementById('nav');
+        let lastScroll = 0;
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+
+            if (currentScroll > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+
+            lastScroll = currentScroll;
+        });
+
+        // Reveal on scroll
+        const revealElements = document.querySelectorAll('.reveal');
+
+        const revealOnScroll = () => {
+            const windowHeight = window.innerHeight;
+
+            revealElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const revealPoint = 150;
+
+                if (elementTop < windowHeight - revealPoint) {
+                    element.classList.add('active');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', revealOnScroll);
+        window.addEventListener('load', revealOnScroll);
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
