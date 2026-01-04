@@ -1073,88 +1073,514 @@
         }
 
         /* ========================================
-           PRICING
+           PRICING - COMPREHENSIVE REDESIGN
            ======================================== */
-        .pricing { background: var(--color-bg-primary); }
+        .pricing {
+            background: var(--color-bg-primary);
+            padding: 0;
+        }
+
+        /* Pricing Hero */
+        .pricing-hero {
+            padding: var(--space-3xl) 0 var(--space-2xl);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(ellipse, rgba(201, 169, 98, 0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .pricing-hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .pricing-hero h1 {
+            font-size: clamp(2.2rem, 4vw, 3.2rem);
+            margin-bottom: var(--space-md);
+            line-height: 1.15;
+        }
+
+        .pricing-hero-subhead {
+            font-size: 1.15rem;
+            color: var(--color-text-secondary);
+            line-height: 1.7;
+            margin-bottom: var(--space-lg);
+        }
+
+        .pricing-hero-ctas {
+            display: flex;
+            gap: var(--space-md);
+            justify-content: center;
+            margin-bottom: var(--space-sm);
+        }
+
+        .pricing-hero-note {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+        }
+
+        /* Pricing Grid - 4 cards */
+        .pricing-cards-section {
+            padding: var(--space-xl) 0 var(--space-2xl);
+        }
 
         .pricing-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: var(--space-md);
-            margin-top: var(--space-xl);
+            align-items: start;
         }
 
         .pricing-card {
             background: var(--color-bg-elevated);
             border: 1px solid var(--color-border);
-            padding: var(--space-xl);
+            padding: var(--space-lg);
             position: relative;
             transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
         }
 
-        .pricing-card.featured { border-color: var(--color-accent); }
+        /* Pro card - EMPHASIZED */
+        .pricing-card.featured {
+            border-color: var(--color-accent);
+            background: linear-gradient(180deg, rgba(201, 169, 98, 0.08) 0%, var(--color-bg-elevated) 100%);
+            transform: scale(1.02);
+            box-shadow: 0 8px 40px rgba(201, 169, 98, 0.12);
+            z-index: 2;
+        }
 
         .pricing-card.featured::before {
-            content: 'Most Popular';
+            content: 'Recommended';
             position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            top: -1px;
+            left: -1px;
+            right: -1px;
             background: var(--color-accent);
             color: var(--color-bg-deep);
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 0.5rem;
+            text-align: center;
+        }
+
+        .pricing-card.featured .pricing-card-inner {
+            padding-top: var(--space-md);
+        }
+
+        /* Enterprise card - DE-EMPHASIZED */
+        .pricing-card.muted {
+            opacity: 0.75;
+            background: rgba(18, 21, 30, 0.5);
+        }
+
+        .pricing-card.muted:hover {
+            opacity: 1;
+        }
+
+        .pricing-card:hover {
+            border-color: var(--color-border-accent);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.03);
+        }
+
+        .pricing-tier {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--color-accent);
+            margin-bottom: var(--space-xs);
+        }
+
+        .pricing-card-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-md);
+        }
+
+        .pricing-price {
+            margin-bottom: var(--space-md);
+        }
+
+        .pricing-amount {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            color: var(--color-text-primary);
+            line-height: 1;
+        }
+
+        .pricing-period {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+            margin-left: 0.25rem;
+        }
+
+        .pricing-cancel {
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .pricing-includes-label {
             font-size: 0.75rem;
             font-weight: 600;
             letter-spacing: 0.1em;
             text-transform: uppercase;
-            padding: 0.5rem 1rem;
-        }
-
-        .pricing-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--color-border-accent);
-        }
-
-        .pricing-tier {
-            font-size: 0.85rem;
-            font-weight: 600;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--color-accent);
+            color: var(--color-text-muted);
             margin-bottom: var(--space-sm);
-        }
-
-        .pricing-card h3 { margin-bottom: var(--space-md); }
-
-        .pricing-description {
-            color: var(--color-text-secondary);
-            margin-bottom: var(--space-lg);
-            padding-bottom: var(--space-lg);
-            border-bottom: 1px solid var(--color-border);
+            padding-top: var(--space-md);
+            border-top: 1px solid var(--color-border);
         }
 
         .pricing-features {
             list-style: none;
-            margin-bottom: var(--space-lg);
+            margin-bottom: var(--space-md);
+            flex-grow: 1;
         }
 
         .pricing-features li {
             display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            padding: var(--space-xs) 0;
+            align-items: flex-start;
+            gap: 0.6rem;
+            padding: 0.4rem 0;
             color: var(--color-text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.4;
         }
 
         .pricing-features li svg {
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             color: var(--color-accent);
             flex-shrink: 0;
+            margin-top: 3px;
+        }
+
+        .pricing-limits {
+            list-style: none;
+            margin-bottom: var(--space-md);
+            padding-top: var(--space-sm);
+            border-top: 1px dashed var(--color-border);
+        }
+
+        .pricing-limits li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            padding: 0.3rem 0;
+            color: var(--color-text-muted);
+            font-size: 0.85rem;
+        }
+
+        .pricing-limits li svg {
+            width: 12px;
+            height: 12px;
+            color: var(--color-text-muted);
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+
+        .pricing-best-for {
+            margin-bottom: var(--space-md);
+            padding: var(--space-sm);
+            background: rgba(201, 169, 98, 0.06);
+            border-left: 2px solid var(--color-accent);
+        }
+
+        .pricing-best-for-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-accent);
+            margin-bottom: 0.3rem;
+        }
+
+        .pricing-best-for-list {
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+            line-height: 1.5;
         }
 
         .pricing-card .btn {
             width: 100%;
             justify-content: center;
+            margin-top: auto;
+        }
+
+        /* Clarifying Microcopy / FAQ */
+        .pricing-faq {
+            padding: var(--space-xl) 0;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .pricing-faq-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-lg);
+        }
+
+        .pricing-faq-item h4 {
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .pricing-faq-item p {
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Comparison Table */
+        .pricing-comparison {
+            padding: var(--space-2xl) 0;
+            background: var(--color-bg-deep);
+        }
+
+        .pricing-comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: var(--space-lg);
+        }
+
+        .pricing-comparison-table th,
+        .pricing-comparison-table td {
+            padding: var(--space-sm) var(--space-md);
+            text-align: left;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .pricing-comparison-table th {
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-text-muted);
+            letter-spacing: 0.05em;
+        }
+
+        .pricing-comparison-table th:not(:first-child) {
+            text-align: center;
+            color: var(--color-text-secondary);
+        }
+
+        .pricing-comparison-table th.highlight {
+            color: var(--color-accent);
+        }
+
+        .pricing-comparison-table td {
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+        }
+
+        .pricing-comparison-table td:not(:first-child) {
+            text-align: center;
+        }
+
+        .pricing-comparison-table .check {
+            color: var(--color-accent);
+        }
+
+        .pricing-comparison-table .dash {
+            color: var(--color-text-muted);
+            opacity: 0.5;
+        }
+
+        .pricing-comparison-table tbody tr {
+            transition: background 0.3s ease;
+        }
+
+        .pricing-comparison-table tbody tr:hover {
+            background: var(--color-bg-elevated);
+        }
+
+        /* Value Reinforcement */
+        .pricing-value {
+            padding: var(--space-2xl) 0;
+            background: var(--color-bg-primary);
+        }
+
+        .pricing-value-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-2xl);
+            align-items: center;
+        }
+
+        .pricing-value-reasons h3 {
+            font-size: 1.1rem;
+            color: var(--color-text-muted);
+            font-weight: 500;
+            margin-bottom: var(--space-md);
+        }
+
+        .pricing-value-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-sm);
+        }
+
+        .pricing-value-list li {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-size: 1.1rem;
+            color: var(--color-text-primary);
+        }
+
+        .pricing-value-list li::before {
+            content: '';
+            width: 8px;
+            height: 2px;
+            background: var(--color-accent);
+        }
+
+        .pricing-value-quote {
+            padding: var(--space-lg);
+            background: var(--color-bg-elevated);
+            border-left: 3px solid var(--color-accent);
+            position: relative;
+        }
+
+        .pricing-value-quote::before {
+            content: '"';
+            position: absolute;
+            top: var(--space-sm);
+            left: var(--space-md);
+            font-family: var(--font-display);
+            font-size: 4rem;
+            color: var(--color-accent);
+            opacity: 0.2;
+            line-height: 1;
+        }
+
+        .pricing-value-quote p {
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            font-style: italic;
+            color: var(--color-text-primary);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Objection Handling */
+        .pricing-objections {
+            padding: var(--space-xl) 0;
+            border-top: 1px solid var(--color-border);
+            background: var(--color-bg-primary);
+        }
+
+        .pricing-objections-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-lg);
+        }
+
+        .pricing-objection {
+            text-align: center;
+        }
+
+        .pricing-objection-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .pricing-objection-desc {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+        }
+
+        /* Final CTA */
+        .pricing-final-cta {
+            padding: var(--space-2xl) 0;
+            text-align: center;
+            background: linear-gradient(180deg, var(--color-bg-primary) 0%, var(--color-bg-deep) 100%);
+        }
+
+        .pricing-final-cta h2 {
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            margin-bottom: var(--space-sm);
+        }
+
+        .pricing-final-cta-note {
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-lg);
+        }
+
+        /* Responsive */
+        @media (max-width: 1100px) {
+            .pricing-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .pricing-card.featured {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+
+            .pricing-card.featured:hover {
+                transform: none;
+            }
+
+            .pricing-faq-grid,
+            .pricing-objections-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-value-content {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-value-list {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-hero-ctas {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .pricing-comparison-table {
+                font-size: 0.8rem;
+            }
+
+            .pricing-comparison-table th,
+            .pricing-comparison-table td {
+                padding: var(--space-xs) var(--space-sm);
+            }
         }
 
         /* ========================================
@@ -1922,84 +2348,315 @@
 
     <!-- Pricing -->
     <section class="pricing" id="pricing">
-        <div class="container">
-            <div class="section-header reveal" style="text-align: center; max-width: 600px; margin: 0 auto;">
-                <span class="section-label">Pricing</span>
-                <h2 class="section-title">Simple Pricing Aligned with Value</h2>
+        <!-- Pricing Hero -->
+        <div class="pricing-hero">
+            <div class="container">
+                <div class="pricing-hero-content reveal">
+                    <h1>Decision-making infrastructure for teams.</h1>
+                    <p class="pricing-hero-subhead">Run structured decision cycles that surface truth, resolve conflict, and leave a clear record — without meetings spiraling.</p>
+                    <div class="pricing-hero-ctas">
+                        <a href="#start" class="btn btn-primary">Start free</a>
+                        <a href="#how-it-works" class="btn btn-secondary">See how it works</a>
+                    </div>
+                    <p class="pricing-hero-note">No credit card required.</p>
+                </div>
             </div>
+        </div>
 
-            <div class="pricing-grid">
-                <div class="pricing-card reveal reveal-delay-1">
-                    <span class="pricing-tier">Team</span>
-                    <h3>Per Seat</h3>
-                    <p class="pricing-description">For teams building a culture of better decision-making.</p>
-                    <ul class="pricing-features">
-                        <li>
-                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
-                            Unlimited decisions
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
-                            AI analysis engine
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
-                            Decision memory
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
-                            Team collaboration
-                        </li>
-                    </ul>
-                    <a href="#start" class="btn btn-secondary">Contact sales</a>
+        <!-- Pricing Cards -->
+        <div class="pricing-cards-section">
+            <div class="container">
+                <div class="pricing-grid">
+                    <!-- Free -->
+                    <div class="pricing-card reveal reveal-delay-1">
+                        <span class="pricing-tier">Free</span>
+                        <p class="pricing-card-title">For trying it out</p>
+                        <div class="pricing-price">
+                            <span class="pricing-amount">$0</span>
+                        </div>
+                        <p class="pricing-includes-label">Includes</p>
+                        <ul class="pricing-features">
+                            <li>
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                                1 active decision (Wigwam)
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                                Up to 5 participants
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                                Full decision workflow
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                                AI synthesis
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                                Decision summary
+                            </li>
+                        </ul>
+                        <ul class="pricing-limits">
+                            <li>
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8h8"/></svg>
+                                No exports
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8h8"/></svg>
+                                No history beyond 7 days
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8h8"/></svg>
+                                Single workspace
+                            </li>
+                        </ul>
+                        <a href="#start" class="btn btn-secondary">Start free</a>
+                    </div>
+
+                    <!-- Pro - FEATURED -->
+                    <div class="pricing-card featured reveal reveal-delay-2">
+                        <div class="pricing-card-inner">
+                            <span class="pricing-tier">Pro</span>
+                            <p class="pricing-card-title">For individuals & small teams</p>
+                            <div class="pricing-price">
+                                <span class="pricing-amount">$79</span><span class="pricing-period">/ month</span>
+                                <p class="pricing-cancel">(cancel anytime)</p>
+                            </div>
+                            <p class="pricing-includes-label">Everything in Free, plus</p>
+                            <ul class="pricing-features">
+                                <li>
+                                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                                    Unlimited active decisions
+                                </li>
+                                <li>
+                                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                                    Unlimited participants
+                                </li>
+                                <li>
+                                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                                    Full decision history
+                                </li>
+                                <li>
+                                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                                    Exports (PDF / Markdown)
+                                </li>
+                                <li>
+                                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                                    Priority AI processing
+                                </li>
+                            </ul>
+                            <div class="pricing-best-for">
+                                <p class="pricing-best-for-label">Best for</p>
+                                <p class="pricing-best-for-list">Founders, Product leads, Strategy owners</p>
+                            </div>
+                            <a href="#start" class="btn btn-primary">Upgrade to Pro</a>
+                        </div>
+                    </div>
+
+                    <!-- Team -->
+                    <div class="pricing-card reveal reveal-delay-3">
+                        <span class="pricing-tier">Team</span>
+                        <p class="pricing-card-title">For growing organizations</p>
+                        <div class="pricing-price">
+                            <span class="pricing-amount">$249</span><span class="pricing-period">/ month</span>
+                        </div>
+                        <p class="pricing-includes-label">Everything in Pro, plus</p>
+                        <ul class="pricing-features">
+                            <li>
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                                Shared team workspace
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                                Multiple facilitators
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                                Roles & permissions
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                                Organization-wide decision memory
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                                Team analytics
+                            </li>
+                        </ul>
+                        <div class="pricing-best-for">
+                            <p class="pricing-best-for-label">Best for</p>
+                            <p class="pricing-best-for-list">Leadership teams, Cross-functional groups, Remote orgs</p>
+                        </div>
+                        <a href="#start" class="btn btn-secondary">Start Team plan</a>
+                    </div>
+
+                    <!-- Enterprise - MUTED -->
+                    <div class="pricing-card muted reveal reveal-delay-4">
+                        <span class="pricing-tier">Enterprise</span>
+                        <p class="pricing-card-title">For regulated or large orgs</p>
+                        <div class="pricing-price">
+                            <span class="pricing-amount" style="font-size: 1.8rem;">Custom</span>
+                        </div>
+                        <p class="pricing-includes-label">Includes</p>
+                        <ul class="pricing-features">
+                            <li>
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                                Advanced governance
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                                Audit logs & compliance
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                                Dedicated environments
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                                SSO & integrations
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
+                                SLA & priority support
+                            </li>
+                        </ul>
+                        <a href="#start" class="btn btn-secondary">Contact sales</a>
+                    </div>
                 </div>
-                <div class="pricing-card featured reveal reveal-delay-2">
-                    <span class="pricing-tier">Enterprise</span>
-                    <h3>Custom</h3>
-                    <p class="pricing-description">For organizations where decision quality is strategic.</p>
-                    <ul class="pricing-features">
-                        <li>
-                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
-                            Everything in Team
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
-                            SSO & SAML
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
-                            Advanced audit logs
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
-                            Dedicated support
-                        </li>
-                    </ul>
-                    <a href="#start" class="btn btn-primary">Contact sales</a>
+            </div>
+        </div>
+
+        <!-- Clarifying Microcopy / FAQ -->
+        <div class="pricing-faq">
+            <div class="container">
+                <div class="pricing-faq-grid reveal">
+                    <div class="pricing-faq-item">
+                        <h4>What's an "active decision"?</h4>
+                        <p>An active decision is a live decision cycle with participants contributing. Once resolved, it closes automatically and no longer counts toward limits.</p>
+                    </div>
+                    <div class="pricing-faq-item">
+                        <h4>Do archived decisions count?</h4>
+                        <p>No. Only active decisions count.</p>
+                    </div>
+                    <div class="pricing-faq-item">
+                        <h4>Can I downgrade anytime?</h4>
+                        <p>Yes. Nothing is locked in.</p>
+                    </div>
                 </div>
-                <div class="pricing-card reveal reveal-delay-3">
-                    <span class="pricing-tier">Advisory</span>
-                    <h3>Per Decision</h3>
-                    <p class="pricing-description">For boards, advisors, and high-stakes singular decisions.</p>
-                    <ul class="pricing-features">
-                        <li>
-                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
-                            Flexible participation
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
-                            No seat commitment
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
-                            Full feature access
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>
-                            Permanent record
-                        </li>
-                    </ul>
-                    <a href="#start" class="btn btn-secondary">Contact sales</a>
+            </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <div class="pricing-comparison">
+            <div class="container container-narrow">
+                <table class="pricing-comparison-table reveal">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Free</th>
+                            <th class="highlight">Pro</th>
+                            <th>Team</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Active decisions</td>
+                            <td>1</td>
+                            <td>Unlimited</td>
+                            <td>Unlimited</td>
+                        </tr>
+                        <tr>
+                            <td>Participants</td>
+                            <td>5</td>
+                            <td>Unlimited</td>
+                            <td>Unlimited</td>
+                        </tr>
+                        <tr>
+                            <td>AI synthesis</td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                        </tr>
+                        <tr>
+                            <td>Decision history</td>
+                            <td>7 days</td>
+                            <td>Unlimited</td>
+                            <td>Unlimited</td>
+                        </tr>
+                        <tr>
+                            <td>Exports</td>
+                            <td class="dash">—</td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                        </tr>
+                        <tr>
+                            <td>Shared workspace</td>
+                            <td class="dash">—</td>
+                            <td class="dash">—</td>
+                            <td class="check">✓</td>
+                        </tr>
+                        <tr>
+                            <td>Roles & permissions</td>
+                            <td class="dash">—</td>
+                            <td class="dash">—</td>
+                            <td class="check">✓</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Value Reinforcement -->
+        <div class="pricing-value">
+            <div class="container">
+                <div class="pricing-value-content reveal">
+                    <div class="pricing-value-reasons">
+                        <h3>Why teams use this</h3>
+                        <ul class="pricing-value-list">
+                            <li>Fewer meetings</li>
+                            <li>Faster convergence</li>
+                            <li>Clear ownership</li>
+                            <li>Decisions that stick</li>
+                        </ul>
+                    </div>
+                    <div class="pricing-value-quote">
+                        <p>We stopped re-litigating the same decisions over and over.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Objection Handling -->
+        <div class="pricing-objections">
+            <div class="container">
+                <div class="pricing-objections-grid reveal">
+                    <div class="pricing-objection">
+                        <p class="pricing-objection-title">No long-term contracts</p>
+                        <p class="pricing-objection-desc">Cancel anytime.</p>
+                    </div>
+                    <div class="pricing-objection">
+                        <p class="pricing-objection-title">Your data stays yours</p>
+                        <p class="pricing-objection-desc">Private by default. Never used for training.</p>
+                    </div>
+                    <div class="pricing-objection">
+                        <p class="pricing-objection-title">Works async or live</p>
+                        <p class="pricing-objection-desc">Use it however your team works.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final CTA -->
+        <div class="pricing-final-cta">
+            <div class="container">
+                <div class="reveal">
+                    <h2>Start with a real decision</h2>
+                    <p class="pricing-final-cta-note">No setup. No sales call.</p>
+                    <a href="#start" class="btn btn-primary">
+                        Start free
+                        <span class="btn-arrow">&rarr;</span>
+                    </a>
                 </div>
             </div>
         </div>
